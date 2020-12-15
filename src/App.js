@@ -11,7 +11,12 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentStep: null
+      currentStep: null,
+      parameters: {
+        noOfCars: 5,
+        carCapacity: 1000,
+        noOfClients: 30
+      }
     }
   }
 
@@ -20,18 +25,26 @@ class App extends React.Component {
     this.setState({currentStep: step})
   }
 
+
+  handleParametersChange = parameter => event => {
+    const value = event.target.value
+    let parametersTemp = {...this.state.parameters}
+    parametersTemp[parameter] = Number.parseInt(value)
+    this.setState({parameters: parametersTemp})
+  }
+
   resolveView = currentStep => {
     if(currentStep != null) {
       currentStep = currentStep.key
     }
     switch (currentStep) {
       case "data":
-        return <Data />
+        return <Data noOfRows={this.state.parameters.noOfClients}/>
       case "result":
         return <Result />
       case "parameters":
       default:
-        return <Parameters />
+        return <Parameters parameters={this.state.parameters} onParameterChange={this.handleParametersChange}/>
     }
   }
 
