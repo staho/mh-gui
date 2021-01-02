@@ -4,12 +4,23 @@ import CityInput from './CityInput'
 
 class Data extends React.Component {
     handlePaste = event => {
-        console.log(event.clipboardData.getData('Text'))
+        const pastedText = event.clipboardData.getData('Text')
+        let lines = pastedText.split("\r\n")
+        let parsedData = lines.map((line, index) => {
+            const parsedLine = line.split("\t")
+            return {
+                city: parsedLine[0],
+                lat: parsedLine[1],
+                lon: parsedLine[2],
+                demand: parsedLine[3]
+            }
+        })
+        console.log(parsedData)
+        this.props.onDataReplace(parsedData)
     }
 
     handleValueChange = (index, param) => event => {
         let newValue = event.target.value
-        console.log(newValue, index, param)
         let tempData = {...this.props.data[index]}
         tempData[param] = newValue
         this.props.onDataChange(tempData, index)

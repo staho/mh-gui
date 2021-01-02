@@ -25,6 +25,11 @@ class App extends React.Component {
     this.setState({currentStep: step})
   }
 
+  replaceData = data => {
+    const noOfClients = data.length
+    this.setState({data: data, noOfClients: noOfClients})
+  }
+
 
   handleParametersChange = parameter => event => {
     const value = event.target.value
@@ -48,7 +53,7 @@ class App extends React.Component {
     }
     switch (currentStep) {
       case "data":
-        return <Data data={this.state.data} noOfRows={this.state.parameters.noOfClients} onDataChange={this.handleDataChange}/>
+        return <Data data={this.state.data} noOfRows={this.state.parameters.noOfClients} onDataChange={this.handleDataChange} onDataReplace={this.replaceData}/>
       case "result":
         return <Result />
       case "parameters":
