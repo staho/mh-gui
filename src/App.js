@@ -16,7 +16,8 @@ class App extends React.Component {
         noOfCars: 5,
         carCapacity: 1000,
         noOfClients: 30
-      }
+      },
+      data: []
     }
   }
 
@@ -33,13 +34,21 @@ class App extends React.Component {
     this.setState({parameters: parametersTemp})
   }
 
+  handleDataChange = (newData, index) => {
+    if(index === undefined) throw new Error("Index must be provided on data change event")
+
+    let tempData = [...this.state.data]
+    tempData[index] = newData
+    this.setState({data: tempData})
+  }
+
   resolveView = currentStep => {
     if(currentStep != null) {
       currentStep = currentStep.key
     }
     switch (currentStep) {
       case "data":
-        return <Data noOfRows={this.state.parameters.noOfClients}/>
+        return <Data data={this.state.data} noOfRows={this.state.parameters.noOfClients} onDataChange={this.handleDataChange}/>
       case "result":
         return <Result />
       case "parameters":
@@ -61,10 +70,10 @@ class App extends React.Component {
               direction="column"
               justify="flex-start"
               alignItems="stretch">
-                <Grid item>
+                <Grid item style={{height: "10%"}}>
                   <AppBar handleStepChange={this.handleStepChange} />
                 </Grid>
-                <Grid item style={{height: "90vh"}} container direction="row" justify="center" alignItems="center">
+                <Grid item style={{height: "90%"}} container direction="row" justify="center" alignItems="center">
                   {stepView}
                 </Grid>
           </Grid>
