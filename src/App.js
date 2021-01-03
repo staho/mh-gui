@@ -44,7 +44,6 @@ class App extends React.Component {
     if(index === undefined) throw new Error("Index must be provided on data change event")
 
     let tempData = [...this.state.data]
-    console.log(newData)
     tempData[index] = newData
     this.setState({data: tempData})
   }
