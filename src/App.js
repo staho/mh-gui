@@ -27,7 +27,9 @@ class App extends React.Component {
 
   replaceData = data => {
     const noOfClients = data.length
-    this.setState({data: data, noOfClients: noOfClients})
+    let parametersTemp = {...this.state.parameters}
+    parametersTemp.noOfClients = noOfClients
+    this.setState({data: data, parameters: parametersTemp})
   }
 
 
