@@ -17,7 +17,6 @@ class CityInput extends React.Component {
             this.state.lat = this.props.data.lat ? this.props.data.lat : ''
             this.state.lon = this.props.data.lon ? this.props.data.lon : ''
             this.state.demand = this.props.data.demand ? this.props.data.demand : ''
-            console.log(this.props.data)
         }
     }
 

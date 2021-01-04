@@ -2,6 +2,9 @@ import React from 'react'
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet'
 import { WAYS } from './../DevData/ResultMock'
 
+
+const colors = ["#FF5733", "#000000", "#0017FF", "#FF00D8", "#7800FF", "#905C1E", "#FF4BAD", "#006114", "#AF601A", "#B03A2E" ]
+
 class Result extends React.Component {
     constructor(props) {
         super(props)
@@ -11,8 +14,8 @@ class Result extends React.Component {
     }
 
     prepareLineForWay = way => {
-        return way.map(point => {
-            return [point.lat, point.lon]
+        return way.pathCities.map(point => {
+            return [point.latitude, point.longitude]
         })
     }
 
@@ -22,9 +25,23 @@ class Result extends React.Component {
 
     preparePolyLines = ways => {
         const lines = this.prepareLines(ways)
-        return lines.map(line => {
-            return <Polyline positions={line} pathOptions={this.getRandomLineColor()}/>
+        return lines.map((line, i) => {
+            return <Polyline positions={line} pathOptions={{color: colors[i]}}/>
         })
+    }
+
+    prepareMarkers = data => {
+        return data.map(c => this.prepareSingleMarker(c))
+    }
+
+    prepareSingleMarker = markerData => {
+        const position = [ markerData.lat, markerData.lon ]
+        return <Marker position = {position}>
+            <Popup>
+                {`${markerData.city}`}<br/>
+                {`Demand: ${markerData.demand}`}
+            </Popup>
+        </Marker>
     }
 
     getRandomLineColor = () => {
@@ -37,8 +54,11 @@ class Result extends React.Component {
       }
 
     render() {
-        console.log(WAYS)
-        const polyLines = this.preparePolyLines(WAYS)
+        const result = this.props.result
+        const data = this.props.data
+        const paths = result.paths
+        const markers = this.prepareMarkers(data)
+        const polyLines = this.preparePolyLines(paths)
 
         return (
             <div style={{height: "100%", width: "100%"}}>
@@ -47,7 +67,8 @@ class Result extends React.Component {
                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    {polyLines}                    
+                    {polyLines}  
+                    {markers}                  
                 </MapContainer>
             </div>
         )
