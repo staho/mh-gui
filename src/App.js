@@ -15,7 +15,11 @@ class App extends React.Component {
       parameters: {
         noOfCars: 5,
         carCapacity: 1000,
-        noOfClients: 30
+        noOfClients: 30,
+        tabuDelay: '',
+        tabuRandomBound: '',
+        maxIterations: '',
+        maxIterationsWithoutImprovement: ''
       },
       data: []
     }
@@ -32,7 +36,7 @@ class App extends React.Component {
 
   transformInput = () => {
     let request = {}
-    const stateParameters = {...this.state.parameters}
+    const stateParameters = { ...this.state.parameters }
     request.noOfCars = stateParameters.noOfCars
     request.carCapacity = stateParameters.carCapacity
     request.noOfCities = stateParameters.noOfClients - 1
@@ -46,8 +50,16 @@ class App extends React.Component {
       }
     })
 
+    let parameters = {
+      tabuDelay: stateParameters.tabuDelay === '' ? null : stateParameters.tabuDelay,
+      tabuRandomBound: stateParameters.tabuRandomBound === '' ? null : stateParameters.tabuRandomBound,
+      maxIterations: stateParameters.maxIterations === '' ? null : stateParameters.maxIterations,
+      maxIterationsWithoutImprovement: stateParameters.maxIterationsWithoutImprovement === '' ? null : stateParameters.maxIterationsWithoutImprovement
+    }
+
     let body = {}
-    body.request = request
+    body.data = request
+    body.parameters = parameters
     console.log(body)
     return body
   }
@@ -98,10 +110,10 @@ class App extends React.Component {
       case "data":
         return <Data data={this.state.data} noOfRows={this.state.parameters.noOfClients} onDataChange={this.handleDataChange} onDataReplace={this.replaceData} />
       case "result":
-        return <Result result={this.state.result} data={this.state.data}/>
+        return <Result result={this.state.result} data={this.state.data} />
       case "loading":
         return <div />
-        // todo: make some spinning shit
+      // todo: make some spinning shit
       case "parameters":
       default:
         return <Parameters parameters={this.state.parameters} onParameterChange={this.handleParametersChange} />
